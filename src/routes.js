@@ -7,4 +7,6 @@ const routes = express.Router();
 
 routes.get("/users", UsersConstroller.index);
 
+routes.post("/users/login", UsersConstroller.login)
+
 module.exports = routes;
