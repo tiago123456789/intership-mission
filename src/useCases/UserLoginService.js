@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs");
 
+const InvalidCredentialsError = require("../errors/InvalidCredentialsError");
+
 const UserRepository = require("../repository/UserRepository");
 const GenerateJwtTokenProvider = require("../providers/GenerateJwtTokenProvider");
 
@@ -13,7 +15,7 @@ class UserLoginService {
     const userByEmail = await userRepository.findByEmail(email);
 
     if (userByEmail.length == 0) {
-      throw new Error("Credenciais invalidas!");
+      throw new InvalidCredentialsError("Credenciais invalidas!");
     }
 
     const isPasswordValued = await bcrypt.compare(
@@ -22,7 +24,7 @@ class UserLoginService {
     );
 
     if (!isPasswordValued) {
-      throw new Error("Credenciais invalidas!")
+      throw new InvalidCredentialsError("Credenciais invalidas!");
     }
 
     const role = await userRepository.getRoleByRoleId(userByEmail[0].role_id);
@@ -34,7 +36,7 @@ class UserLoginService {
       role: role[0].name,
     });
 
-    return token
+    return token;
   }
 }
 
