@@ -1,5 +1,4 @@
 const express = require("express");
-const knex = require("./database");
 
 const UsersConstroller = require('./controllers/UsersController');
 
