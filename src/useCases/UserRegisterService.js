@@ -1,4 +1,4 @@
-const BussinesCredentialError = require("../errors/BussinesCredentialError");
+const BussinesError = require("../errors/BussinesError");
 const UserRepository = require("../repository/UserRepository");
 const userRepository = new UserRepository();
 
@@ -11,9 +11,7 @@ class UserRegisterService {
     const userByEmail = await userRepository.findByEmail(email);
 
     if (userByEmail.length > 0) {
-      throw new BussinesCredentialError(
-        "Não é possível usar o email informado."
-      );
+      throw new BussinesError("Não é possível usar o email informado.");
     }
 
     const companyCreated = await userRepository.createCompany(company);
@@ -22,13 +20,15 @@ class UserRegisterService {
 
     const passwordHash = bcrypt.hashSync(password, 8);
 
-    const userCreated = await userRepository.createUser(
-      email,
-      passwordHash,
-      name,
-      1,
-      companyId
-    );
+    const newUser = {
+      email: email,
+      password: passwordHash,
+      name: name,
+      role_id: 1,
+      company_id: companyId,
+    };
+
+    return userRepository.createUser(newUser);
   }
 }
 

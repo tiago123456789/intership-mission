@@ -30,9 +30,29 @@ module.exports = {
 
   async register(req, res, next) {
     try {
-      const userCreated = await userRegisterService.execute(req.body);
+      await userRegisterService.execute(req.body);
+      return res.status(201).json({});
     } catch (err) {
       return next(err);
+    }
+  },
+
+  async inviteMember(req, res, next) {
+    const { email, name } = req.body;
+
+    if (!email || !name) {
+      throw new InvalidCredentialsError("Email e Nome são obrigatórios.");
+    }
+
+    try {
+      const newUser = {
+        email,
+        password: await bcrypt.hash("senha_temporaria", 10),
+        name,
+        role_id: 2,
+      };
+    } catch (err) {
+
     }
   },
 };
