@@ -15,8 +15,8 @@ routes.post("/users/login", UsersConstroller.login);
 
 routes.post("/users", UsersConstroller.register);
 
-routes.use(handlerErrors);
-
 routes.use(inviteRoutes);
+
+routes.use(handlerErrors);
 
 module.exports = routes;
