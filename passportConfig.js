@@ -16,7 +16,7 @@ const opts = {
 passport.use(new JwtStrategy(opts, (jwtPayload, done) => {
     try {
         // Simulação de busca do usuário no banco de dados
-        const user = userRepository.findByEmail(jwtPayload.id); // Implemente esta função
+        const user = userRepository.findByEmail(jwtPayload.email); // Implemente esta função
         if (user) {
             return done(null, user);
         } else {

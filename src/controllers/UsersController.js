@@ -51,8 +51,6 @@ module.exports = {
         name,
         role_id: 2,
       };
-    } catch (err) {
-
-    }
+    } catch (err) {}
   },
 };

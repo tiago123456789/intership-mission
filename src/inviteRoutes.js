@@ -1,23 +1,45 @@
-const express = require('express');
-const passport = require('passport');
-const inviteController = require('../controllers/inviteController');
+const express = require("express");
+const userController = require("./controllers/UsersController");
+
+const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 
-// Middleware para verificar role ADMIN
 function authorizeRole(role) {
-    return (req, res, next) => {
-        if (req.body.role_id !== role) {
-            return res.status(403);
-        }
-        next();
-    };
+  return (req, res, next) => {
+    if (req.role !== role.toUpperCase()) {
+      return res
+        .status(403)
+        .json({ message: "Sem permissão para realizar essa ação." });
+    }
+    next();
+  };
 }
 
-router.post('/invite', 
-    passport.authenticate('jwt', { session: false }), 
-    authorizeRole(1), 
-    inviteController.inviteUser
+async function hasAuthenticated(req, res, next) {
+  let token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ message: "Token não informado." });
+  }
+
+  try {
+    token = token.split(" ")[1];
+
+    const payload = await jwt.verify(token, process.env.SECRET_KEY);
+    req.role = payload.role;
+
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Token inválido ou expirou." });
+  }
+}
+
+router.post(
+  "/invite",
+  hasAuthenticated,
+  authorizeRole("ADMIN"),
+  userController.inviteMember
 );
 
 module.exports = router;

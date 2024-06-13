@@ -32,7 +32,7 @@ class UserLoginService {
     const token = generateJwtTokenProvider.getToken({
       userId: userByEmail[0].id,
       email: userByEmail[0].email,
-      company: userByEmail[0].company_id,
+      companyId: userByEmail[0].company_id,
       role: role[0].name,
     });
 
