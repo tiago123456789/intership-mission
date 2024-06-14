@@ -1,3 +1,5 @@
+const yup = require("yup");
+
 const UserLoginService = require("../useCases/UserLoginService");
 const userLoginService = new UserLoginService();
 
@@ -23,7 +25,21 @@ module.exports = {
 
   async login(req, res, next) {
     try {
-      const token = await userLoginService.execute(req.body);
+      const { email, password } = req.body;
+
+      const schema = yup.object().shape({
+        email: yup.string().required("Email é obrigatório."),
+        password: yup.string().required("Senha não foi inserida."),
+      });
+
+      const isValid = schema.isValidSync({ email, password });
+
+      if (!isValid) {
+        const validate = schema.validateSync({ email, password });
+        return res.status(400).json({ message: validate });
+      }
+
+      const token = await userLoginService.execute({ email, password });
       return res.json({ token });
     } catch (err) {
       return next(err);
@@ -32,7 +48,28 @@ module.exports = {
 
   async register(req, res, next) {
     try {
-      await userRegisterService.execute(req.body);
+      const { email, password, name, company } = req.body;
+
+      const schema = yup.object().shape({
+        email: yup.string().required("Email é obrigatório."),
+        password: yup.string().required("Senha não foi inserida."),
+        name: yup.string().required("Nome é obrigatório."),
+        company: yup.string().required("Empresa é obrigatório"),
+      });
+
+      const isValid = schema.isValidSync({ email, password, name, company });
+
+      if (!isValid) {
+        const validate = schema.validateSync({
+          email,
+          password,
+          name,
+          company,
+        });
+        return res.status(400).json({ message: validate });
+      }
+
+      await userRegisterService.execute({ email, password, name, company });
       return res.status(201).json({});
     } catch (err) {
       return next(err);
@@ -41,11 +78,29 @@ module.exports = {
 
   async inviteMember(req, res, next) {
     try {
-      await userInviteService.execute(req);
+      const { email, name } = req.body;
 
-      res.status(201).json({message: "Usuário MEMBER criado!"})
+      const schema = yup.object().shape({
+        email: yup.string().required("Email é obrigatório."),
+        name: yup.string().required("Nome é obrigatório."),
+      });
+
+      const isValid = schema.isValidSync({ email, name });
+
+      if (!isValid) {
+        const validate = schema.validateSync({ email, name });
+        return res.status(400).json({ message: validate });
+      }
+
+      await userInviteService.execute({
+        email,
+        name,
+        companyId: req.companyId,
+      });
+
+      return res.status(201).json({});
     } catch (err) {
-      res.status(400).json({message: err.message});
+      return next(err);
     }
   },
 };

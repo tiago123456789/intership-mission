@@ -13,6 +13,10 @@ class UserRepository {
     return knex("roles").where("id", roleId);
   }
 
+  findByEmailAndCompanyId(email, companyId) {
+    return knex("users").where("email", email).where("company_id", "=", companyId).limit(1);
+  }
+
   createUser(newUser) {
     return knex("users").insert(newUser).returning("*");
   }
@@ -23,6 +27,18 @@ class UserRepository {
         name: company,
       })
       .returning("*");
+  }
+
+  createInvite(invite) {
+    return knex("invites").insert(invite)
+  }
+
+  getCompanyById(id) {
+    return knex("companies").where("id", id).select(["name"]);
+  }
+
+  getAdminByRoleIdAndCompanyId(roleId, companyId) {
+    return knex("users").where("role_id", "=", roleId).where("company_id", "=", companyId).limit(1);
   }
 }
 

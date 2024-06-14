@@ -28,6 +28,7 @@ async function hasAuthenticated(req, res, next) {
 
     const payload = await jwt.verify(token, process.env.SECRET_KEY);
     req.role = payload.role;
+    req.companyId = payload.companyId;
 
     next();
   } catch (err) {

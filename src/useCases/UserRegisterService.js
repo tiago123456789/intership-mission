@@ -3,6 +3,7 @@ const UserRepository = require("../repository/UserRepository");
 const userRepository = new UserRepository();
 
 const bcrypt = require("bcryptjs");
+const { ADMIN } = require("../utils/roleUtil");
 
 class UserRegisterService {
   async execute(params) {
@@ -24,7 +25,7 @@ class UserRegisterService {
       email: email,
       password: passwordHash,
       name: name,
-      role_id: 1,
+      role_id: ADMIN,
       company_id: companyId,
     };
 
