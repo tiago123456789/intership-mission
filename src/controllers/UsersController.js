@@ -12,6 +12,9 @@ const userRegisterService = new UserRegisterService();
 const UserInviteService = require("../useCases/UserInviteService");
 const userInviteService = new UserInviteService();
 
+const UserConfirmInviteService = require("../useCases/UserConfirmInviteService");
+const userConfirmInviteService = new UserConfirmInviteService();
+
 module.exports = {
   async index(req, res) {
     try {
@@ -99,6 +102,31 @@ module.exports = {
       });
 
       return res.status(201).json({});
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async confirmInvite(req, res, next) {
+    try {
+      const { password } = req.body;
+
+      const { hash } = req.params;
+
+      const schema = yup.object().shape({
+        password: yup.string().required("Senha é obrigatório."),
+      });
+
+      const isValid = schema.isValidSync({ password });
+
+      if (!isValid) {
+        const validate = schema.validateSync({ password });
+        return res.status(400).json({ message: validate });
+      }
+
+      await userConfirmInviteService.execute({ password, hash });
+
+      return res.json({});
     } catch (err) {
       return next(err);
     }

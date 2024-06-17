@@ -3,48 +3,42 @@ const fs = require("fs");
 const path = require("path");
 const handlebars = require("handlebars");
 
-
 class MailProvider {
   constructor() {
-    this.cliente = nodemailer.createTransport({
-      host: "sandbox.smtp.mailtrap.io",
-      port: 2525,
+    this.client = nodemailer.createTransport({
+      host: process.env.MAIL_HOST,
+      port: process.env.MAIL_PORT,
       auth: {
-        user: process.env.TRANSPORT_USER,
-        pass: process.env.TRANSPORT_PASS,
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASSWORD,
       },
     });
   }
 
-  async emailSend(user, adminName, companyName, link) {
+  async send(data, email, pathTemplate) {
     const emailTemplateSource = fs.readFileSync(
-      path.join(__dirname, "../../../template.hbs"),
+      path.join(__dirname, pathTemplate),
       "utf8"
     );
 
     const template = handlebars.compile(emailTemplateSource);
 
-    const messageToSend = template({
-      name: user.name,
-      link,
-      adminName,
-      companyName,
-    });
+    const messageToSend = template(data);
 
     const emailToSent = {
       from: process.env.MAIL_FROM,
-      to: user.email,
-      subject: "Hello world",
-      text: "Hello world",
+      to: email.to,
+      subject: email.subject,
       html: messageToSend,
     };
-
-    this.cliente.sendMail(emailToSent, (err, info) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Email sent: ", info.response);
-      }
+    return new Promise((resolve, reject) => {
+      this.client.sendMail(emailToSent, (err, info) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(info);
+        }
+      });
     });
   }
 }

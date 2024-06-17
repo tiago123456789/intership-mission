@@ -43,4 +43,6 @@ router.post(
   userController.inviteMember
 );
 
+router.put("/confirmation-invites/:hash", userController.confirmInvite)
+
 module.exports = router;

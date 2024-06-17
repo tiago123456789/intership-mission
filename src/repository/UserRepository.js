@@ -40,6 +40,18 @@ class UserRepository {
   getAdminByRoleIdAndCompanyId(roleId, companyId) {
     return knex("users").where("role_id", "=", roleId).where("company_id", "=", companyId).limit(1);
   }
+
+  getHash(hashCode) {
+    return knex("invites").where("hash", "=", hashCode).returning("*")
+  }
+
+  updatePasswordByUserId(password, userId) {
+    return knex("users").where("id", "=", userId).update({password: password})
+  }
+
+  deleteHashInviteByHash(hash) {
+    return knex("invites").where("hash", "=", hash).del();
+  }
 }
 
 module.exports = UserRepository;

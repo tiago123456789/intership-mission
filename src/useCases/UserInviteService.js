@@ -2,8 +2,7 @@ const { randomUUID } = require("crypto");
 const bcrypt = require("bcryptjs");
 const UserRepository = require("../repository/UserRepository");
 const BussinesError = require("../errors/BussinesError");
-const emailSend = require("../emails");
-const MailProvider = require('../adapters/implementations/mailer/MailProvider');
+const MailProvider = require("../adapters/implementations/mailer/MailProvider");
 const mailProvider = new MailProvider();
 const { MEMBER, ADMIN } = require("../utils/roleUtil");
 const userRepository = new UserRepository();
@@ -44,7 +43,19 @@ class UserInviteService {
       adminCompany
     );
 
-    await mailProvider.emailSend(userCreated[0], admin[0].name, company[0].name, link);
+    const data = {
+      name: userCreated[0].name,
+      adminName: admin[0].name,
+      companyName: company[0].name,
+      link: link,
+    };
+
+    const emailToSent = {
+      to: userCreated[0].email,
+      subject: "Convite para empresa",
+    };
+
+    await mailProvider.send(data, emailToSent, "../../../views/invite.hbs");
   }
 }
 
