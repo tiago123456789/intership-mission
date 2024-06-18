@@ -1,4 +1,3 @@
-
 const UserRepository = require("../repository/UserRepository");
 
 const userRepository = new UserRepository();
