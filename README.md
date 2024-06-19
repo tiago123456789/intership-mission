@@ -17,3 +17,11 @@
 ```
     git commit -m "feat: add endpoint to allow create feed"
 ```
+
+## Instructions how to open PR
+
+- First finished your task in your branch feature
+- Push the code to remote repository
+- Access repository on Github
+- Access your branch feature
+- Open PR(pull request) for branch **develop**. Case you have doubt how to do it, [click here](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
