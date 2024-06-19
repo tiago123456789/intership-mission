@@ -1,10 +1,11 @@
 const UserRepository = require("../repository/UserRepository");
 
-const userRepository = new UserRepository();
-
 class UserListService {
+  constructor(userRepository = new UserRepository()) {
+    this.userRepository = userRepository;
+  }
   async execute() {
-    const users = await userRepository.getAllUsers();
+    const users = await this.userRepository.getAllUsers();
     return users;
   }
 }

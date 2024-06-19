@@ -1,4 +1,4 @@
-const { randomUUID } = require("crypto");
+const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const UserRepository = require("../repository/UserRepository");
 const BussinesError = require("../errors/BussinesError");
@@ -30,7 +30,7 @@ class UserInviteService {
     const userCreated = await userRepository.createUser(newUser);
 
     const userId = userCreated[0].id;
-    const hash = randomUUID();
+    const hash = crypto.randomUUID();
 
     await userRepository.createInvite({ user_id: userId, hash });
 

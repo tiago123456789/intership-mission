@@ -5,20 +5,27 @@ const InvalidCredentialsError = require("../errors/InvalidCredentialsError");
 const UserRepository = require("../repository/UserRepository");
 const GenerateJwtTokenProvider = require("../providers/GenerateJwtTokenProvider");
 
-const generateJwtTokenProvider = new GenerateJwtTokenProvider();
-const userRepository = new UserRepository();
-
 class UserLoginService {
+  constructor(
+    userRepository = new UserRepository(),
+    bcrypt,
+    generateJwtTokenProvider = new GenerateJwtTokenProvider()
+  ) {
+    this.userRepository = userRepository;
+    this.bcrypt = bcrypt;
+    this.generateJwtTokenProvider = generateJwtTokenProvider
+  }
+
   async execute(params) {
     const { email, password } = params;
 
-    const userByEmail = await userRepository.findByEmail(email);
+    const userByEmail = await this.userRepository.findByEmail(email);
 
     if (userByEmail.length == 0) {
       throw new InvalidCredentialsError("Credenciais invalidas!");
     }
 
-    const isPasswordValued = await bcrypt.compare(
+    const isPasswordValued = await this.bcrypt.compare(
       password,
       userByEmail[0].password
     );
@@ -27,9 +34,11 @@ class UserLoginService {
       throw new InvalidCredentialsError("Credenciais invalidas!");
     }
 
-    const role = await userRepository.getRoleByRoleId(userByEmail[0].role_id);
+    const role = await this.userRepository.getRoleByRoleId(
+      userByEmail[0].role_id
+    );
 
-    const token = generateJwtTokenProvider.getToken({
+    const token = this.generateJwtTokenProvider.getToken({
       userId: userByEmail[0].id,
       email: userByEmail[0].email,
       companyId: userByEmail[0].company_id,
