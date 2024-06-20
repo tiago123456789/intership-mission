@@ -1,4 +1,4 @@
-const { ADMIN } = require("../utils/roleUtil");
+const { ADMIN } = require("../utils/RoleUtil");
 const UserLoginService = require("./UserLoginService");
 
 describe("UserLoginService", () => {
@@ -13,7 +13,7 @@ describe("UserLoginService", () => {
     compare: jest.fn(),
   };
 
-  generateJwtTokenProvider = {
+  const generateJwtTokenProvider = {
     getToken: jest.fn(),
   };
 
@@ -80,14 +80,15 @@ describe("UserLoginService", () => {
 
     bcrypt.compare.mockResolvedValue(params.password, params.password);
 
-    const tokenResult = await userLoginService.execute(params);
+    userLoginService = new UserLoginService(userRepository, bcrypt, generateJwtTokenProvider);
 
-    const result = await userLoginService.execute(params);
+    const token = await userLoginService.execute(params);
 
-    expect(result).toBe(tokenResult);
+    expect(token != null).toBe(true);
     expect(bcrypt.compare).toHaveBeenCalledWith(
       params.password,
       params.password
     );
+    expect(generateJwtTokenProvider.getToken).toHaveBeenCalledTimes(1)
   });
 });
