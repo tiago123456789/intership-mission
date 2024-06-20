@@ -1,8 +1,7 @@
 const BussinesError = require("../errors/BussinesError");
 const UserRepository = require("../repository/UserRepository");
 
-const bcrypt = require("bcryptjs");
-const { ADMIN } = require("../utils/roleUtil");
+const { ADMIN } = require("../utils/RoleUtil");
 
 class UserRegisterService {
   constructor(userRepository = new UserRepository(), bcrypt) {
