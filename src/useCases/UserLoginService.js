@@ -8,11 +8,11 @@ const GenerateJwtTokenProvider = require("../providers/GenerateJwtTokenProvider"
 class UserLoginService {
   constructor(
     userRepository = new UserRepository(),
-    bcrypt,
+    bcryptInstance = bcrypt,
     generateJwtTokenProvider = new GenerateJwtTokenProvider()
   ) {
     this.userRepository = userRepository;
-    this.bcrypt = bcrypt;
+    this.bcrypt = bcryptInstance;
     this.generateJwtTokenProvider = generateJwtTokenProvider
   }
 
