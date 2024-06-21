@@ -1,12 +1,14 @@
 const BussinesError = require("../errors/BussinesError");
 const UserRepository = require("../repository/UserRepository");
 
-const { ADMIN } = require("../utils/RoleUtil");
+const bcrypt = require("bcryptjs");
+
+const { ADMIN } = require("../utils/roleUtil");
 
 class UserRegisterService {
   constructor(userRepository = new UserRepository(), bcryptInstance = bcrypt) {
     this.userRepository = userRepository;
-    this.bcrypt = bcryptInstance
+    this.bcrypt = bcryptInstance;
   }
 
   async execute(params) {
