@@ -1,6 +1,6 @@
 const BussinesError = require("../errors/BussinesError");
 const FeedRepository = require("../repository/FeedRepository");
-const { ADMIN_NAME } = require("../utils/roleUtil");
+const { ADMIN_NAME } = require("../utils/RoleUtil");
 
 class UserCreateFeedService {
   constructor(feedRepository = new FeedRepository()) {

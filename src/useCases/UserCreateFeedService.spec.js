@@ -1,10 +1,10 @@
-const { ADMIN_NAME } = require("../utils/roleUtil");
+const { ADMIN_NAME, MEMBER_NAME } = require("../utils/RoleUtil");
 const UserCreateFeedService = require("./UserCreateFeedService");
 
 describe("UserCreateFeedService", () => {
   let userCreateFeedService;
 
-  beforeEach(() => {});
+  beforeEach(() => { });
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -14,7 +14,7 @@ describe("UserCreateFeedService", () => {
     title: "title",
     content: "content",
     image: "image.com",
-    user_id: 1,
+    userId: 1,
     is_pendent: false,
   };
 
@@ -38,33 +38,42 @@ describe("UserCreateFeedService", () => {
   });
 
   it("Should if then user is ADMIN will create feed", async () => {
-    try {
-      await feedRepository.findFeedByTitle.mockResolvedValue([{}]);
-      await feedRepository.create.mockResolvedValue([{ id: 1, ...params }]);
+    params.userRole = ADMIN_NAME
+    await feedRepository.findFeedByTitle.mockResolvedValue([]);
+    await feedRepository.create.mockResolvedValue({ id: 1, ...params });
 
-      userCreateFeedService = new UserCreateFeedService(feedRepository);
+    userCreateFeedService = new UserCreateFeedService(feedRepository);
 
-      const result = await userCreateFeedService.execute(params);
-      expect(result).toEqual({ id: 1, ...params });
-      expect(feedRepository.findFeedByTitle).toHaveBeenCalledWith(params.title);
-      expect(feedRepository.create).toHaveBeenCalledWith(params);
-    } catch (err) {}
+    const fakeParamsCreateFeed = {
+      title: params.title,
+      content: params.content,
+      image: `${process.env.API_URL}${params.image}`,
+      user_id: params.userId,
+      is_pendent: false,
+    }
+
+    const result = await userCreateFeedService.execute(params);
+    expect(result).toEqual({ id: 1, ...params });
+    expect(feedRepository.findFeedByTitle).toHaveBeenCalledWith(params.title);
+    expect(feedRepository.create).toHaveBeenCalledWith(fakeParamsCreateFeed);
   });
 
   it("Should if then user is MEMBER will create feed", async () => {
-    try {
-      await feedRepository.findFeedByTitle.mockResolvedValue([{}]);
-      await feedRepository.create.mockResolvedValue([{ id: 1, ...params }]);
+    params.userRole = MEMBER_NAME
+    await feedRepository.findFeedByTitle.mockResolvedValue([]);
+    await feedRepository.create.mockResolvedValue({ id: 1, ...params });
 
-      params.is_pendent = false;
-
-      userCreateFeedService = new UserCreateFeedService(feedRepository);
-
-      const result = await userCreateFeedService.execute(params);
-      expect(result).toEqual({ id: 1, ...params });
-      expect(result).toEqual({is_pendent: params.is_pendent})
-      expect(feedRepository.findFeedByTitle).toHaveBeenCalledWith(params.title);
-      expect(feedRepository.create).toHaveBeenCalledWith(params);
-    } catch (err) {}
+    userCreateFeedService = new UserCreateFeedService(feedRepository);
+    const fakeParamsCreateFeed = {
+      title: params.title,
+      content: params.content,
+      image: `${process.env.API_URL}${params.image}`,
+      user_id: params.userId,
+      is_pendent: true,
+    }
+    const result = await userCreateFeedService.execute(params);
+    expect(result).toEqual({ id: 1, ...params });
+    expect(feedRepository.findFeedByTitle).toHaveBeenCalledWith(params.title);
+    expect(feedRepository.create).toHaveBeenCalledWith(fakeParamsCreateFeed);
   });
 });
