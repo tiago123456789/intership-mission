@@ -1,0 +1,21 @@
+name: "CI(continues integration) pipeline"
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - main
+      - stage
+      - develop
+
+jobs:
+  check_all_tests_ok:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setting Node.js
+        uses: actions/setup-node@v2
+
+      - name: Run tests
+        run: npm install && npm run test
