@@ -5,9 +5,9 @@ const bcrypt = require("bcryptjs");
 const { ADMIN } = require("../utils/roleUtil");
 
 class UserRegisterService {
-  constructor(userRepository = new UserRepository(), bcrypt) {
+  constructor(userRepository = new UserRepository(), bcryptInstance = bcrypt) {
     this.userRepository = userRepository;
-    this.bcrypt = bcrypt
+    this.bcrypt = bcryptInstance
   }
 
   async execute(params) {

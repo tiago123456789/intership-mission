@@ -13,7 +13,7 @@ class UserLoginService {
   ) {
     this.userRepository = userRepository;
     this.bcrypt = bcryptInstance;
-    this.generateJwtTokenProvider = generateJwtTokenProvider
+    this.generateJwtTokenProvider = generateJwtTokenProvider;
   }
 
   async execute(params) {
