@@ -8,12 +8,12 @@ const GenerateJwtTokenProvider = require("../providers/GenerateJwtTokenProvider"
 class UserLoginService {
   constructor(
     userRepository = new UserRepository(),
-    bcrypt,
+    bcryptInstance = bcrypt,
     generateJwtTokenProvider = new GenerateJwtTokenProvider()
   ) {
     this.userRepository = userRepository;
-    this.bcrypt = bcrypt;
-    this.generateJwtTokenProvider = generateJwtTokenProvider
+    this.bcrypt = bcryptInstance;
+    this.generateJwtTokenProvider = generateJwtTokenProvider;
   }
 
   async execute(params) {
