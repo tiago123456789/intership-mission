@@ -3,6 +3,9 @@ const yup = require("yup");
 const UserCreateFeedService = require("../useCases/UserCreateFeedService");
 const userCreateFeedService = new UserCreateFeedService();
 
+const FeedListPendentService = require("../useCases/FeedListPendentService");
+const feedListPendentService = new FeedListPendentService();
+
 module.exports = {
   async createFeed(req, res, next) {
     try {
@@ -36,6 +39,20 @@ module.exports = {
       });
 
       return res.status(201).json({});
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async listFeedPendent(req, res, next) {
+    try {
+      const companyId = req.companyId;
+
+      const { page, pageSize } = req.query;
+
+      const results = await feedListPendentService.execute({companyId, page, pageSize});
+
+      res.json(results);
     } catch (err) {
       next(err);
     }
