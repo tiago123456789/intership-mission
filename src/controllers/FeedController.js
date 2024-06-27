@@ -3,6 +3,9 @@ const yup = require("yup");
 const UserCreateFeedService = require("../useCases/UserCreateFeedService");
 const userCreateFeedService = new UserCreateFeedService();
 
+const FeedApprovedListService = require("../useCases/FeedApprovedListService");
+const feedApprovedListService = new FeedApprovedListService();
+
 module.exports = {
   async createFeed(req, res, next) {
     try {
@@ -38,6 +41,21 @@ module.exports = {
       return res.status(201).json({});
     } catch (err) {
       next(err);
+    }
+  },
+
+  async approvedListFeed(req, res, next) {
+    try {
+      const { title, page, pageSize } = req.query;
+
+      const results = await feedApprovedListService.execute({
+        title,
+        page,
+        pageSize,
+      });
+      res.status(200).json(results);
+    } catch (err) {
+      next();
     }
   },
 };
