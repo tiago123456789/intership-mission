@@ -8,7 +8,7 @@ describe("FeedApprovedListService", () => {
     getApprovedFeeds: jest.fn(),
     getTotalApprovedFeeds: jest.fn(),
     findApprovedFeedsByTitle: jest.fn(),
-    getTotalApprovedFeedsByTitle: jest.fn()
+    getTotalApprovedFeedsByTitle: jest.fn(),
   };
 
   const mockFeeds = [
@@ -36,29 +36,29 @@ describe("FeedApprovedListService", () => {
     jest.clearAllMocks();
   });
 
-  // it("should handle empty approved feed list", async () => {
-  //   const params = {
-  //     title: undefined,
-  //     page: 1,
-  //     pageSize: 10,
-  //   };
+  it("should handle empty approved feed list", async () => {
+    const params = {
+      title: undefined,
+      page: 1,
+      pageSize: 10,
+    };
 
-  //   const result = {
-  //     total: 0,
-  //     page: params.page,
-  //     pageSize: params.pageSize,
-  //     data: [],
-  //   }
+    const result = {
+      total: 0,
+      page: params.page,
+      pageSize: params.pageSize,
+      data: [],
+    }
 
-  //   feedRepository.getApprovedFeeds.mockResolvedValue([]);
-  //   feedRepository.getTotalApprovedFeeds.mockResolvedValue([{ count: 0 }]);
+    feedRepository.getApprovedFeeds.mockResolvedValue([]);
+    feedRepository.getTotalApprovedFeeds.mockResolvedValue([{ count: 0 }]);
 
-  //   feedApprovedListService = new FeedApprovedListService(feedRepository);
+    feedApprovedListService = new FeedApprovedListService(feedRepository);
 
-  //   const feeds = await feedApprovedListService.execute(params);
+    const feeds = await feedApprovedListService.execute(params);
 
-  //   expect(feeds).toEqual(result);
-  // });
+    expect(feeds).toEqual(result);
+  });
 
   it("should return a list of approved feeds with query string", async () => {
     const params = {
@@ -66,7 +66,6 @@ describe("FeedApprovedListService", () => {
       page: 1,
       pageSize: 10,
     };
-
     const result = {
       total: 2,
       page: params.page,
@@ -76,24 +75,35 @@ describe("FeedApprovedListService", () => {
     feedRepository.findApprovedFeedsByTitle.mockResolvedValue(mockFeeds);
     feedRepository.getTotalApprovedFeeds.mockResolvedValue([{ count: 2 }]);
     feedRepository.getTotalApprovedFeedsByTitle.mockResolvedValue([{ count: 2 }]);
-
     feedApprovedListService = new FeedApprovedListService(feedRepository);
-
     const feeds = await feedApprovedListService.execute(params);
-
     expect(feeds).toEqual(result);
     expect(feedRepository.findApprovedFeedsByTitle).toHaveBeenCalledWith(
       params
     );
   });
 
-  // it("should return a list of approved feeds without query string of title", async () => {
-  //   feedRepository.getApprovedFeeds.mockResolvedValue(mockFeeds);
+  it("should return a list of approved feeds without query string of title", async () => {
+    const params = {
+      title: undefined,
+      page: 1,
+      pageSize: 10,
+    };
 
-  //   feedApprovedListService = new FeedApprovedListService(feedRepository);
+    const result = {
+      total: 2,
+      page: params.page,
+      pageSize: params.pageSize,
+      data: mockFeeds,
+    };
+    feedRepository.getApprovedFeeds.mockResolvedValue(mockFeeds);
+    feedRepository.getTotalApprovedFeeds.mockResolvedValue([{ count: 2 }]);
 
-  //   const feeds = await feedApprovedListService.execute({page: 1, pageSize: 10});
+    feedApprovedListService = new FeedApprovedListService(feedRepository);
 
-  //   expect(feeds).toEqual(mockFeeds);
-  // });
+    const feeds = await feedApprovedListService.execute(params);
+
+    expect(feeds).toEqual(result);
+    expect(feedRepository.findApprovedFeedsByTitle).toHaveBeenCalledTimes(0);
+  });
 });
