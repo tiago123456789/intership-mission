@@ -1,20 +1,10 @@
 const express = require("express");
 const userController = require("../controllers/UsersController");
 
-const hasAuthenticated = require('../middlewares/hasAuthenticated');
+const hasAuthenticated = require("../middlewares/hasAuthenticated");
+const authorizeRole = require("../middlewares/authorizeRole");
 
 const router = express.Router();
-
-function authorizeRole(role) {
-  return (req, res, next) => {
-    if (req.role !== role.toUpperCase()) {
-      return res
-        .status(403)
-        .json({ message: "Sem permissão para realizar essa ação." });
-    }
-    next();
-  };
-}
 
 router.post(
   "/invite",
@@ -23,6 +13,6 @@ router.post(
   userController.inviteMember
 );
 
-router.put("/confirmation-invites/:hash", userController.confirmInvite)
+router.put("/confirmation-invites/:hash", userController.confirmInvite);
 
 module.exports = router;
