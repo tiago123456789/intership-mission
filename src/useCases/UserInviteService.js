@@ -4,7 +4,7 @@ const UserRepository = require("../repository/UserRepository");
 const BussinesError = require("../errors/BussinesError");
 const MailProvider = require("../adapters/implementations/mailer/MailProvider");
 const mailProvider = new MailProvider();
-const { MEMBER, ADMIN } = require("../utils/roleUtil");
+const { MEMBER, ADMIN } = require("../utils/RoleUtil");
 const userRepository = new UserRepository();
 
 class UserInviteService {
