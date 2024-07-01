@@ -39,4 +39,6 @@ router.get(
   feedController.listFeedPendent
 );
 
+router.get("/feeds/:id", feedController.getFeedById)
+
 module.exports = router;
