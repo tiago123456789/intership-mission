@@ -73,6 +73,10 @@ class FeedRepository {
       .where("feeds.is_pendent", "=", true)
       .count("feeds.id");
   }
+
+  getFeedById(id) {
+    return knex("feeds").where("id", id);
+  }
 }
 
 module.exports = FeedRepository;
