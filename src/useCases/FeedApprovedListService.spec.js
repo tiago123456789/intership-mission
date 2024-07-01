@@ -1,4 +1,3 @@
-const { except } = require("../database");
 const FeedApprovedListService = require("./FeedApprovedListService");
 
 describe("FeedApprovedListService", () => {
@@ -7,8 +6,6 @@ describe("FeedApprovedListService", () => {
   const feedRepository = {
     getApprovedFeeds: jest.fn(),
     getTotalApprovedFeeds: jest.fn(),
-    findApprovedFeedsByTitle: jest.fn(),
-    getTotalApprovedFeedsByTitle: jest.fn(),
   };
 
   const mockFeeds = [
@@ -48,7 +45,7 @@ describe("FeedApprovedListService", () => {
       page: params.page,
       pageSize: params.pageSize,
       data: [],
-    }
+    };
 
     feedRepository.getApprovedFeeds.mockResolvedValue([]);
     feedRepository.getTotalApprovedFeeds.mockResolvedValue([{ count: 0 }]);
@@ -71,16 +68,13 @@ describe("FeedApprovedListService", () => {
       page: params.page,
       pageSize: params.pageSize,
       data: mockFeeds,
-    }
-    feedRepository.findApprovedFeedsByTitle.mockResolvedValue(mockFeeds);
+    };
+    feedRepository.getApprovedFeeds.mockResolvedValue(mockFeeds);
     feedRepository.getTotalApprovedFeeds.mockResolvedValue([{ count: 2 }]);
-    feedRepository.getTotalApprovedFeedsByTitle.mockResolvedValue([{ count: 2 }]);
     feedApprovedListService = new FeedApprovedListService(feedRepository);
     const feeds = await feedApprovedListService.execute(params);
     expect(feeds).toEqual(result);
-    expect(feedRepository.findApprovedFeedsByTitle).toHaveBeenCalledWith(
-      params
-    );
+    expect(feedRepository.getApprovedFeeds).toHaveBeenCalledWith(params);
   });
 
   it("should return a list of approved feeds without query string of title", async () => {
@@ -104,6 +98,5 @@ describe("FeedApprovedListService", () => {
     const feeds = await feedApprovedListService.execute(params);
 
     expect(feeds).toEqual(result);
-    expect(feedRepository.findApprovedFeedsByTitle).toHaveBeenCalledTimes(0);
   });
 });

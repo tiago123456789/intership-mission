@@ -9,11 +9,14 @@ class FeedApprovedListService {
     let { title: titleQuery, page, pageSize } = params;
 
     const feeds = await this.feedRepository.getApprovedFeeds({
+      title: titleQuery,
       page,
       pageSize,
     });
 
-    const countFeeds = await this.feedRepository.getTotalApprovedFeeds();
+    const countFeeds = await this.feedRepository.getTotalApprovedFeeds({
+      title: titleQuery,
+    });
     const totalFeeds = countFeeds[0].count;
 
     const result = {
@@ -22,35 +25,6 @@ class FeedApprovedListService {
       pageSize: pageSize,
       data: feeds,
     };
-
-    if (titleQuery != undefined) {
-      const titleSplitted = titleQuery.split("+");
-      const titleFinal = titleSplitted.join(" ");
-
-      const feedByTitle = await this.feedRepository.findApprovedFeedsByTitle({
-        title: titleFinal,
-        page,
-        pageSize,
-      });
-
-
-      const countFeeds = await this.feedRepository.getTotalApprovedFeedsByTitle(
-        {
-          title: titleQuery,
-        }
-      );
-
-      const totalFeeds = countFeeds[0].count;
-
-      const resultFeedsByTitle = {
-        total: totalFeeds,
-        page: page,
-        pageSize: pageSize,
-        data: feedByTitle,
-      };
-
-      return resultFeedsByTitle;
-    }
 
     return result;
   }

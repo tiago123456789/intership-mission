@@ -55,7 +55,7 @@ module.exports = {
       });
       res.status(200).json(results);
     } catch (err) {
-      next();
+      next(err);
     }
   },
 };

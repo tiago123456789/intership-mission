@@ -1,3 +1,4 @@
+const { query } = require("express");
 const knex = require("../database/index");
 
 class FeedRepository {
@@ -17,29 +18,6 @@ class FeedRepository {
       .limit(1);
   }
 
-  findApprovedFeedsByTitle(params) {
-    let { title, page, pageSize } = params;
-
-    if (page < 1) page = 1;
-
-    let offset = (page - 1) * pageSize;
-
-    return knex("feeds")
-      .limit(pageSize)
-      .offset(offset)
-      .where("is_pendent", "=", false)
-      .whereILike("title", `%${title}%`);
-  }
-
-  getTotalApprovedFeedsByTitle(params) {
-    const { title } = params;
-
-    return knex("feeds")
-      .where("is_pendent", "=", false)
-      .whereILike("title", `%${title}%`)
-      .count("feeds.id");
-  }
-
   getApprovedFeeds(params) {
     let { page, pageSize } = params;
 
@@ -49,11 +27,24 @@ class FeedRepository {
     return knex("feeds")
       .limit(pageSize)
       .offset(offset)
-      .where("is_pendent", "=", false);
+      .where("is_pendent", "=", false)
+      .modify((query) => {
+        if (params.title) {
+          query.whereILike("title", `%${params.title}%`);
+        }
+      })
+      .orderBy("id", "desc");
   }
 
-  getTotalApprovedFeeds() {
-    return knex("feeds").where("is_pendent", "=", false).count("feeds.id");
+  getTotalApprovedFeeds(params) {
+    return knex("feeds")
+      .where("is_pendent", "=", false)
+      .count("feeds.id")
+      .modify((query) => {
+        if (params.title) {
+          query.whereILike("title", `%${params.title}%`);
+        }
+      });
   }
 }
 

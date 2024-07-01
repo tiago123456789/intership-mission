@@ -29,6 +29,6 @@ router.post(
   feedController.createFeed
 );
 
-router.get("/feeds", hasAuthenticated, feedController.approvedListFeed);
+router.get("/feeds", feedController.approvedListFeed);
 
 module.exports = router;
