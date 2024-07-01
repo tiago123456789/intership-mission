@@ -2,6 +2,7 @@ const express = require("express");
 const feedController = require("../controllers/FeedController");
 
 const hasAuthenticated = require("../middlewares/hasAuthenticated");
+const authorizeRole = require("../middlewares/authorizeRole");
 
 const multer = require("multer");
 
@@ -30,5 +31,12 @@ router.post(
 );
 
 router.get("/feeds", feedController.approvedListFeed);
+
+router.get(
+  "/feeds/pending",
+  hasAuthenticated,
+  authorizeRole("ADMIN"),
+  feedController.listFeedPendent
+);
 
 module.exports = router;
