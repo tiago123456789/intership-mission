@@ -75,7 +75,7 @@ class FeedRepository {
   }
 
   getFeedById(id) {
-    return knex("feeds").where("id", id);
+    return knex("feeds").where("id", id).limit(1);
   }
 }
 

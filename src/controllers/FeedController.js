@@ -9,8 +9,8 @@ const feedApprovedListService = new FeedApprovedListService();
 const FeedListPendentService = require("../useCases/FeedListPendentService");
 const feedListPendentService = new FeedListPendentService();
 
-const FeedByIdService = require("../useCases/FeedByIdService");
-const feedByIdService = new FeedByIdService();
+const GetFeedByIdService = require("../useCases/GetFeedByIdService");
+const getFeedByIdService = new GetFeedByIdService();
 
 module.exports = {
   async createFeed(req, res, next) {
@@ -87,7 +87,7 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const result = await feedByIdService.execute({ id });
+      const result = await getFeedByIdService.execute({ id });
 
       res.status(200).json(result);
     } catch (err) {

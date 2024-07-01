@@ -1,7 +1,7 @@
 const NotFoundError = require("../errors/NotFoundError");
 const FeedRepository = require("../repository/FeedRepository");
 
-class FeedByIdService {
+class GetFeedByIdService {
   constructor(feedRepository = new FeedRepository()) {
     this.feedRepository = feedRepository;
   }
@@ -19,4 +19,4 @@ class FeedByIdService {
   }
 }
 
-module.exports = FeedByIdService;
+module.exports = GetFeedByIdService;

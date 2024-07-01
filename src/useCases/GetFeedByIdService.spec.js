@@ -1,7 +1,7 @@
-const FeedByIdService = require("./FeedByIdService");
+const GetFeedByIdService = require("./GetFeedByIdService");
 
 describe("FeedByIdService", () => {
-  let feedByIdService;
+  let getFeedByIdService;
 
   const params = {
     id: 1,
@@ -29,11 +29,9 @@ describe("FeedByIdService", () => {
     try {
       feedRepository.getFeedById.mockResolvedValue([]);
 
-      feedByIdService = new FeedByIdService(feedRepository);
+      getFeedByIdService = new GetFeedByIdService(feedRepository);
 
-      const result = await feedByIdService.execute(params);
-
-      expect(result).toEqual([]);
+      await getFeedByIdService.execute(params);
     } catch (err) {
       expect(err.message).toEqual("Feed não foi encontrado.");
     }
@@ -42,9 +40,9 @@ describe("FeedByIdService", () => {
   it("Should return a feed by id", async () => {
     feedRepository.getFeedById.mockResolvedValue(mockFeed);
 
-    feedByIdService = new FeedByIdService(feedRepository);
+    getFeedByIdService = new GetFeedByIdService(feedRepository);
 
-    const result = await feedByIdService.execute(params);
+    const result = await getFeedByIdService.execute(params);
 
     expect(result).toEqual(mockFeed);
   });
