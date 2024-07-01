@@ -30,6 +30,8 @@ router.post(
   feedController.createFeed
 );
 
+router.get("/feeds", feedController.approvedListFeed);
+
 router.get(
   "/feeds/pending",
   hasAuthenticated,
