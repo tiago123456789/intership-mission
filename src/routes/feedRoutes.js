@@ -39,6 +39,13 @@ router.get(
   feedController.listFeedPendent
 );
 
-router.get("/feeds/:id", feedController.getFeedById)
+router.get("/feeds/:id", feedController.getFeedById);
+
+router.put(
+  "/feeds/approve/:id",
+  hasAuthenticated,
+  authorizeRole("ADMIN"),
+  feedController.approveFeeds
+);
 
 module.exports = router;

@@ -12,6 +12,9 @@ const feedListPendentService = new FeedListPendentService();
 const GetFeedByIdService = require("../useCases/GetFeedByIdService");
 const getFeedByIdService = new GetFeedByIdService();
 
+const ApproveFeedService = require("../useCases/ApproveFeedService");
+const approveFeedService = new ApproveFeedService();
+
 module.exports = {
   async createFeed(req, res, next) {
     try {
@@ -46,7 +49,7 @@ module.exports = {
 
       return res.status(201).json({});
     } catch (err) {
-      next(err);
+      return next(err);
     }
   },
 
@@ -59,9 +62,9 @@ module.exports = {
         page,
         pageSize,
       });
-      res.status(200).json(results);
+      return res.status(200).json(results);
     } catch (err) {
-      next(err);
+      return next(err);
     }
   },
 
@@ -77,9 +80,9 @@ module.exports = {
         pageSize,
       });
 
-      res.json(results);
+      return res.json(results);
     } catch (err) {
-      next(err);
+      return next(err);
     }
   },
 
@@ -89,9 +92,23 @@ module.exports = {
 
       const result = await getFeedByIdService.execute({ id });
 
-      res.status(200).json(result);
+      return res.status(200).json(result);
     } catch (err) {
-      next(err);
+      return next(err);
+    }
+  },
+
+  async approveFeeds(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const { is_pendent } = req.body;
+
+      const result = await approveFeedService.execute({ id, is_pendent });
+
+      return res.status(201).json(result);
+    } catch (err) {
+      return next(err);
     }
   },
 };
