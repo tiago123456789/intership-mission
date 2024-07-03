@@ -1,18 +1,23 @@
-const yup = require("yup");
+const yup = require('yup');
 
-const UserLoginService = require("../useCases/UserLoginService");
+const UserLoginService = require('../useCases/UserLoginService');
+
 const userLoginService = new UserLoginService();
 
-const UserListService = require("../useCases/UserListService");
+const UserListService = require('../useCases/UserListService');
+
 const userListService = new UserListService();
 
-const UserRegisterService = require("../useCases/UserRegisterService");
+const UserRegisterService = require('../useCases/UserRegisterService');
+
 const userRegisterService = new UserRegisterService();
 
-const UserInviteService = require("../useCases/UserInviteService");
+const UserInviteService = require('../useCases/UserInviteService');
+
 const userInviteService = new UserInviteService();
 
-const UserConfirmInviteService = require("../useCases/UserConfirmInviteService");
+const UserConfirmInviteService = require('../useCases/UserConfirmInviteService');
+
 const userConfirmInviteService = new UserConfirmInviteService();
 
 module.exports = {
@@ -31,8 +36,8 @@ module.exports = {
       const { email, password } = req.body;
 
       const schema = yup.object().shape({
-        email: yup.string().required("Email é obrigatório."),
-        password: yup.string().required("Senha não foi inserida."),
+        email: yup.string().required('Email é obrigatório.'),
+        password: yup.string().required('Senha não foi inserida.'),
       });
 
       const isValid = schema.isValidSync({ email, password });
@@ -54,10 +59,10 @@ module.exports = {
       const { email, password, name, company } = req.body;
 
       const schema = yup.object().shape({
-        email: yup.string().required("Email é obrigatório."),
-        password: yup.string().required("Senha não foi inserida."),
-        name: yup.string().required("Nome é obrigatório."),
-        company: yup.string().required("Empresa é obrigatório"),
+        email: yup.string().required('Email é obrigatório.'),
+        password: yup.string().required('Senha não foi inserida.'),
+        name: yup.string().required('Nome é obrigatório.'),
+        company: yup.string().required('Empresa é obrigatório'),
       });
 
       const isValid = schema.isValidSync({ email, password, name, company });
@@ -84,8 +89,8 @@ module.exports = {
       const { email, name } = req.body;
 
       const schema = yup.object().shape({
-        email: yup.string().required("Email é obrigatório."),
-        name: yup.string().required("Nome é obrigatório."),
+        email: yup.string().required('Email é obrigatório.'),
+        name: yup.string().required('Nome é obrigatório.'),
       });
 
       const isValid = schema.isValidSync({ email, name });
@@ -114,7 +119,7 @@ module.exports = {
       const { hash } = req.params;
 
       const schema = yup.object().shape({
-        password: yup.string().required("Senha é obrigatório."),
+        password: yup.string().required('Senha é obrigatório.'),
       });
 
       const isValid = schema.isValidSync({ password });

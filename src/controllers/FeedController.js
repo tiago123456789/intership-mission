@@ -1,15 +1,19 @@
-const yup = require("yup");
+const yup = require('yup');
 
-const UserCreateFeedService = require("../useCases/UserCreateFeedService");
+const UserCreateFeedService = require('../useCases/UserCreateFeedService');
+
 const userCreateFeedService = new UserCreateFeedService();
 
-const FeedApprovedListService = require("../useCases/FeedApprovedListService");
+const FeedApprovedListService = require('../useCases/FeedApprovedListService');
+
 const feedApprovedListService = new FeedApprovedListService();
 
-const FeedListPendentService = require("../useCases/FeedListPendentService");
+const FeedListPendentService = require('../useCases/FeedListPendentService');
+
 const feedListPendentService = new FeedListPendentService();
 
-const GetFeedByIdService = require("../useCases/GetFeedByIdService");
+const GetFeedByIdService = require('../useCases/GetFeedByIdService');
+
 const getFeedByIdService = new GetFeedByIdService();
 
 module.exports = {
@@ -17,13 +21,13 @@ module.exports = {
     try {
       const { title, content } = req.body;
       const { filename: image } = req.file;
-      const userId = req.userId;
+      const { userId } = req;
       const userRole = req.role;
 
       const schema = yup.object().shape({
-        title: yup.string().required("Titulo é obrigatório."),
-        content: yup.string().required("Conteúdo é obrigatório."),
-        image: yup.string().required("Imagem é obrigatório."),
+        title: yup.string().required('Titulo é obrigatório.'),
+        content: yup.string().required('Conteúdo é obrigatório.'),
+        image: yup.string().required('Imagem é obrigatório.'),
       });
 
       const isValid = schema.isValidSync({ title, content, image });
@@ -31,7 +35,7 @@ module.exports = {
       if (!isValid) {
         const validate = schema.validateSync(
           { title, content, image },
-          { abortEarly: false }
+          { abortEarly: false },
         );
         return res.status(400).json({ message: validate });
       }
@@ -46,7 +50,7 @@ module.exports = {
 
       return res.status(201).json({});
     } catch (err) {
-      next(err);
+      return next(err);
     }
   },
 
@@ -67,7 +71,7 @@ module.exports = {
 
   async listFeedPendent(req, res, next) {
     try {
-      const companyId = req.companyId;
+      const { companyId } = req;
 
       const { page, pageSize } = req.query;
 
