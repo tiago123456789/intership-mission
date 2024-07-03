@@ -1,18 +1,18 @@
-const express = require("express");
-const userController = require("../controllers/UsersController");
+const express = require('express');
+const userController = require('../controllers/UsersController');
 
-const hasAuthenticated = require("../middlewares/hasAuthenticated");
-const authorizeRole = require("../middlewares/authorizeRole");
+const hasAuthenticated = require('../middlewares/hasAuthenticated');
+const authorizeRole = require('../middlewares/authorizeRole');
 
 const router = express.Router();
 
 router.post(
-  "/invite",
+  '/invite',
   hasAuthenticated,
-  authorizeRole("ADMIN"),
-  userController.inviteMember
+  authorizeRole('ADMIN'),
+  userController.inviteMember,
 );
 
-router.put("/confirmation-invites/:hash", userController.confirmInvite);
+router.put('/confirmation-invites/:hash', userController.confirmInvite);
 
 module.exports = router;

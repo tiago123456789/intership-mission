@@ -1,7 +1,7 @@
-const nodemailer = require("nodemailer");
-const fs = require("fs");
-const path = require("path");
-const handlebars = require("handlebars");
+const nodemailer = require('nodemailer');
+const fs = require('fs');
+const path = require('path');
+const handlebars = require('handlebars');
 
 class MailProvider {
   constructor() {
@@ -18,7 +18,7 @@ class MailProvider {
   async send(data, email, pathTemplate) {
     const emailTemplateSource = fs.readFileSync(
       path.join(__dirname, pathTemplate),
-      "utf8"
+      'utf8',
     );
 
     const template = handlebars.compile(emailTemplateSource);

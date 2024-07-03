@@ -1,48 +1,48 @@
-const { query } = require("express");
-const knex = require("../database/index");
+const knex = require('../database/index');
 
 class FeedRepository {
   create(feed) {
-    return knex("feeds").insert(feed);
+    return knex('feeds').insert(feed);
   }
 
   updateIsPendentByUserId(userId) {
-    return knex("feeds")
+    return knex('feeds')
       .where({ user_id: userId })
       .update({ is_pendent: false });
   }
 
   findFeedByTitle(title) {
-    return knex("feeds")
-      .whereRaw("UPPER(title) = ?", [title.toUpperCase()])
+    return knex('feeds')
+      .whereRaw('UPPER(title) = ?', [title.toUpperCase()])
       .limit(1);
   }
 
   getApprovedFeeds(params) {
+    /* eslint-disable */
     let { page, pageSize } = params;
 
     if (page < 1) page = 1;
 
-    let offset = (page - 1) * pageSize;
-    return knex("feeds")
+    const offset = (page - 1) * pageSize;
+    return knex('feeds')
       .limit(pageSize)
       .offset(offset)
-      .where("is_pendent", "=", false)
-      .modify((query) => {
+      .where('is_pendent', '=', false)
+      .modify(query => {
         if (params.title) {
-          query.whereILike("title", `%${params.title}%`);
+          query.whereILike('title', `%${params.title}%`);
         }
       })
-      .orderBy("id", "desc");
+      .orderBy('id', 'desc');
   }
 
   getTotalApprovedFeeds(params) {
-    return knex("feeds")
-      .where("is_pendent", "=", false)
-      .count("feeds.id")
-      .modify((query) => {
+    return knex('feeds')
+      .where('is_pendent', '=', false)
+      .count('feeds.id')
+      .modify(query => {
         if (params.title) {
-          query.whereILike("title", `%${params.title}%`);
+          query.whereILike('title', `%${params.title}%`);
         }
       });
   }
@@ -54,28 +54,28 @@ class FeedRepository {
 
     const offset = (page - 1) * pageSize;
 
-    return knex("feeds")
-      .select("feeds.*")
+    return knex('feeds')
+      .select('feeds.*')
       .limit(pageSize)
       .offset(offset)
-      .innerJoin("users", "feeds.user_id", "=", "users.id")
-      .where("users.company_id", companyId)
-      .where("feeds.is_pendent", "=", true)
-      .orderBy("feeds.id", "desc");
+      .innerJoin('users', 'feeds.user_id', '=', 'users.id')
+      .where('users.company_id', companyId)
+      .where('feeds.is_pendent', '=', true)
+      .orderBy('feeds.id', 'desc');
   }
 
   getTotalFeedsIsPendentByCompanyId(params) {
-    let { companyId } = params;
+    const { companyId } = params;
 
-    return knex("feeds")
-      .innerJoin("users", "feeds.user_id", "=", "users.id")
-      .where("users.company_id", companyId)
-      .where("feeds.is_pendent", "=", true)
-      .count("feeds.id");
+    return knex('feeds')
+      .innerJoin('users', 'feeds.user_id', '=', 'users.id')
+      .where('users.company_id', companyId)
+      .where('feeds.is_pendent', '=', true)
+      .count('feeds.id');
   }
 
   getFeedById(id) {
-    return knex("feeds").where("id", id).limit(1);
+    return knex('feeds').where('id', id).limit(1);
   }
 }
 
