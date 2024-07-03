@@ -17,5 +17,5 @@ jobs:
       - name: Setting Node.js
         uses: actions/setup-node@v2
 
-      - name: Run tests
+      - name: Check code quality and if code following the standards
         run: npm install && npm run lint
