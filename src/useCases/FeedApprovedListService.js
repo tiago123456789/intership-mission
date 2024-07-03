@@ -1,4 +1,4 @@
-const FeedRepository = require("../repository/FeedRepository");
+const FeedRepository = require('../repository/FeedRepository');
 
 class FeedApprovedListService {
   constructor(feedRepository = new FeedRepository()) {
@@ -6,7 +6,7 @@ class FeedApprovedListService {
   }
 
   async execute(params) {
-    let { title: titleQuery, page, pageSize } = params;
+    const { title: titleQuery, page, pageSize } = params;
 
     const feeds = await this.feedRepository.getApprovedFeeds({
       title: titleQuery,
@@ -21,8 +21,8 @@ class FeedApprovedListService {
 
     const result = {
       total: totalFeeds,
-      page: page,
-      pageSize: pageSize,
+      page,
+      pageSize,
       data: feeds,
     };
 

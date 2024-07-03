@@ -1,22 +1,24 @@
-const crypto = require("crypto");
-const bcrypt = require("bcryptjs");
-const UserRepository = require("../repository/UserRepository");
-const BussinesError = require("../errors/BussinesError");
-const MailProvider = require("../adapters/implementations/mailer/MailProvider");
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+const UserRepository = require('../repository/UserRepository');
+const BussinesError = require('../errors/BussinesError');
+const MailProvider = require('../adapters/implementations/mailer/MailProvider');
+
 const mailProvider = new MailProvider();
-const { MEMBER, ADMIN } = require("../utils/RoleUtil");
+const { MEMBER, ADMIN } = require('../utils/RoleUtil');
+
 const userRepository = new UserRepository();
 
 class UserInviteService {
   async execute(params) {
     const { email, name } = params;
 
-    const adminCompany = parseInt(params.companyId);
+    const adminCompany = parseInt(params.companyId, 10);
     const userByEmailAndCompanyId =
       await userRepository.findByEmailAndCompanyId(email, adminCompany);
 
     if (userByEmailAndCompanyId.length > 0) {
-      throw new BussinesError("Email já está em uso.");
+      throw new BussinesError('Email já está em uso.');
     }
 
     const newUser = {
@@ -40,22 +42,22 @@ class UserInviteService {
 
     const admin = await userRepository.getAdminByRoleIdAndCompanyId(
       ADMIN,
-      adminCompany
+      adminCompany,
     );
 
     const data = {
       name: userCreated[0].name,
       adminName: admin[0].name,
       companyName: company[0].name,
-      link: link,
+      link,
     };
 
     const emailToSent = {
       to: userCreated[0].email,
-      subject: "Convite para empresa",
+      subject: 'Convite para empresa',
     };
 
-    await mailProvider.send(data, emailToSent, "../../../views/invite.hbs");
+    await mailProvider.send(data, emailToSent, '../../../views/invite.hbs');
   }
 }
 

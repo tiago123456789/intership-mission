@@ -1,9 +1,8 @@
-const BussinesError = require("../errors/BussinesError");
-const UserRepository = require("../repository/UserRepository");
+const bcrypt = require('bcryptjs');
+const BussinesError = require('../errors/BussinesError');
+const UserRepository = require('../repository/UserRepository');
 
-const bcrypt = require("bcryptjs");
-
-const { ADMIN } = require("../utils/RoleUtil");
+const { ADMIN } = require('../utils/RoleUtil');
 
 class UserRegisterService {
   constructor(userRepository = new UserRepository(), bcryptInstance = bcrypt) {
@@ -17,7 +16,7 @@ class UserRegisterService {
     const userByEmail = await this.userRepository.findByEmail(email);
 
     if (userByEmail.length > 0) {
-      throw new BussinesError("Não é possível usar o email informado.");
+      throw new BussinesError('Não é possível usar o email informado.');
     }
 
     const companyCreated = await this.userRepository.createCompany(company);
@@ -27,9 +26,9 @@ class UserRegisterService {
     const passwordHash = this.bcrypt.hashSync(password, 8);
 
     const newUser = {
-      email: email,
+      email,
       password: passwordHash,
-      name: name,
+      name,
       role_id: ADMIN,
       company_id: companyId,
     };

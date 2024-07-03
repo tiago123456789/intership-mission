@@ -1,5 +1,5 @@
-const NotFoundError = require("../errors/NotFoundError");
-const FeedRepository = require("../repository/FeedRepository");
+const NotFoundError = require('../errors/NotFoundError');
+const FeedRepository = require('../repository/FeedRepository');
 
 class GetFeedByIdService {
   constructor(feedRepository = new FeedRepository()) {
@@ -11,8 +11,8 @@ class GetFeedByIdService {
 
     const result = await this.feedRepository.getFeedById(id);
 
-    if (result.length == 0) {
-      throw new NotFoundError("Feed não foi encontrado.");
+    if (result.length === 0) {
+      throw new NotFoundError('Feed não foi encontrado.');
     }
 
     return result;

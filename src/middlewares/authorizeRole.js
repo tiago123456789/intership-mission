@@ -3,8 +3,8 @@ module.exports = function authorizeRole(role) {
     if (req.role !== role.toUpperCase()) {
       return res
         .status(403)
-        .json({ message: "Sem permissão para realizar essa ação." });
+        .json({ message: 'Sem permissão para realizar essa ação.' });
     }
-    next();
+    return next();
   };
 };

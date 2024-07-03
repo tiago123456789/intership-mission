@@ -1,6 +1,6 @@
-const BussinesError = require("../errors/BussinesError");
-const FeedRepository = require("../repository/FeedRepository");
-const { ADMIN_NAME } = require("../utils/RoleUtil");
+const BussinesError = require('../errors/BussinesError');
+const FeedRepository = require('../repository/FeedRepository');
+const { ADMIN_NAME } = require('../utils/RoleUtil');
 
 class UserCreateFeedService {
   constructor(feedRepository = new FeedRepository()) {
@@ -15,7 +15,7 @@ class UserCreateFeedService {
     const feedByTitle = await this.feedRepository.findFeedByTitle(title);
 
     if (feedByTitle.length > 0) {
-      throw new BussinesError("O titulo desse feed já está existente.");
+      throw new BussinesError('O titulo desse feed já está existente.');
     }
 
     const feed = {
@@ -26,7 +26,7 @@ class UserCreateFeedService {
       is_pendent: null,
     };
 
-    feed.is_pendent = userRole === ADMIN_NAME ? false : true;
+    feed.is_pendent = userRole !== ADMIN_NAME;
 
     return this.feedRepository.create(feed);
   }

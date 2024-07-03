@@ -1,18 +1,18 @@
-const express = require("express");
+const express = require('express');
 
-const UsersConstroller = require("./controllers/UsersController");
-const handlerErrors = require("./errors/handlerErrors");
+const UsersConstroller = require('./controllers/UsersController');
+const handlerErrors = require('./errors/handlerErrors');
 
-const inviteRoutes = require("./routes/inviteRoutes");
-const feedRoutes = require("./routes/feedRoutes");
+const inviteRoutes = require('./routes/inviteRoutes');
+const feedRoutes = require('./routes/feedRoutes');
 
 const routes = express.Router();
 
-routes.get("/users", UsersConstroller.index);
+routes.get('/users', UsersConstroller.index);
 
-routes.post("/users/login", UsersConstroller.login);
+routes.post('/users/login', UsersConstroller.login);
 
-routes.post("/users", UsersConstroller.register);
+routes.post('/users', UsersConstroller.register);
 
 routes.use(inviteRoutes);
 

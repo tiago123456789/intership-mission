@@ -1,0 +1,21 @@
+name: 'Check code quality'
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - main
+      - stage
+      - develop
+
+jobs:
+  check_code_quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setting Node.js
+        uses: actions/setup-node@v2
+
+      - name: Check code quality and if code following the standards
+        run: npm install && npm run lint
