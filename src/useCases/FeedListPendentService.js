@@ -1,4 +1,4 @@
-const FeedRepository = require("../repository/FeedRepository");
+const FeedRepository = require('../repository/FeedRepository');
 
 class FeedListPendentService {
   constructor(feedRepository = new FeedRepository()) {
@@ -6,9 +6,8 @@ class FeedListPendentService {
   }
 
   async execute(params) {
-    const feedList = await this.feedRepository.getFeedIsPendentByCompanyId(
-      params
-    );
+    const feedList =
+      await this.feedRepository.getFeedIsPendentByCompanyId(params);
 
     const countFeeds =
       await this.feedRepository.getTotalFeedsIsPendentByCompanyId(params);
@@ -16,7 +15,7 @@ class FeedListPendentService {
     const total = countFeeds[0].count;
 
     const result = {
-      total: total,
+      total,
       page: params.page,
       pageSize: params.pageSize,
       data: feedList,
