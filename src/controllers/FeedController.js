@@ -12,8 +12,8 @@ const feedListPendentService = new FeedListPendentService();
 const GetFeedByIdService = require("../useCases/GetFeedByIdService");
 const getFeedByIdService = new GetFeedByIdService();
 
-const ApproveFeedService = require("../useCases/ApproveFeedService");
-const approveFeedService = new ApproveFeedService();
+const ApproveFeedByIdService = require("../useCases/ApproveFeedByIdService");
+const approveFeedByIdService = new ApproveFeedByIdService();
 
 module.exports = {
   async createFeed(req, res, next) {
@@ -102,11 +102,9 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const { is_pendent } = req.body;
+      const result = await approveFeedByIdService.execute({ id });
 
-      const result = await approveFeedService.execute({ id, is_pendent });
-
-      return res.status(201).json(result);
+      return res.status(200).json(result);
     } catch (err) {
       return next(err);
     }

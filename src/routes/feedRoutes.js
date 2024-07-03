@@ -42,7 +42,7 @@ router.get(
 router.get("/feeds/:id", feedController.getFeedById);
 
 router.put(
-  "/feeds/approve/:id",
+  "/feeds/:id/approve",
   hasAuthenticated,
   authorizeRole("ADMIN"),
   feedController.approveFeeds

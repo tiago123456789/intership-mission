@@ -78,10 +78,10 @@ class FeedRepository {
     return knex("feeds").where("id", id).limit(1);
   }
 
-  updateIsPendentByIdAndIsPendent(id, is_pendent) {
+  updateIsPendentByIdAndIsPendent(id) {
     return knex("feeds")
       .where("id", "=", id)
-      .update({ is_pendent: is_pendent })
+      .update({ is_pendent: false })
       .returning("*");
   }
 }

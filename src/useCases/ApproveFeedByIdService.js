@@ -1,17 +1,17 @@
 const NotFoundError = require("../errors/NotFoundError");
 const FeedRepository = require("../repository/FeedRepository");
 
-class ApproveFeedService {
+class ApproveFeedByIdService {
   constructor(feedRepository = new FeedRepository()) {
     this.feedRepository = feedRepository;
   }
 
   async execute(params) {
-    const { id, is_pendent } = params;
+    const { id } = params;
+
+    const is_pendent = false;
 
     let feedById = await this.feedRepository.getFeedById(id);
-
-    console.log(feedById[0]);
 
     if (feedById.length == 0) {
       throw new NotFoundError("Feed inexistente.");
@@ -26,4 +26,4 @@ class ApproveFeedService {
   }
 }
 
-module.exports = ApproveFeedService;
+module.exports = ApproveFeedByIdService;

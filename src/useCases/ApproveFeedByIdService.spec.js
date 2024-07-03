@@ -1,7 +1,7 @@
-const ApproveFeedService = require("./ApproveFeedService");
+const ApproveFeedByIdService = require("./ApproveFeedByIdService");
 
-describe("ApproveFeedService", () => {
-  let approveFeedService;
+describe("ApproveFeedByIdService", () => {
+  let approveFeedByIdService;
 
   const feedRepository = {
     getFeedById: jest.fn(),
@@ -33,15 +33,15 @@ describe("ApproveFeedService", () => {
 
       feedRepository.getFeedById.mockResolvedValue([]);
 
-      approveFeedService = new ApproveFeedService(feedRepository);
+      approveFeedByIdService = new ApproveFeedByIdService(feedRepository);
 
-      await approveFeedService.execute(params);
+      await approveFeedByIdService.execute(params);
     } catch (err) {
       expect(err.message).toEqual("Feed inexistente.");
     }
   });
 
-  it("Should return feed by id", async () => {
+  it("Should approve feed by id", async () => {
     const params = {
       id: 1,
       is_pendent: false,
@@ -64,9 +64,9 @@ describe("ApproveFeedService", () => {
       fakeMockFeed
     );
 
-    approveFeedService = new ApproveFeedService(feedRepository);
+    approveFeedByIdService = new ApproveFeedByIdService(feedRepository);
 
-    const result = await approveFeedService.execute(params);
+    const result = await approveFeedByIdService.execute(params);
 
     expect(result).toEqual(fakeMockFeed);
   });
