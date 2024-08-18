@@ -1,4 +1,4 @@
-## Instructions how to use GIT
+## Instructions how to use GIT  
 
 - Three main branchs: main, stage, develop
   - The main branch is all code is in production
